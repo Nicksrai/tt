@@ -6,7 +6,11 @@ const AUTH_USER_KEY = "auth_user";
 export const authService = {
   async login(username, password) {
     try {
-      const response = await api.post("/auth/login", { username, password });
+      const response = await api.post("/auth/login", {
+        username,
+        email: username,
+        password,
+      });
       const { token, user } = response.data;
       
       // Store token and user info
