@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: travel-db-prod
+    container_name: travel-db
     env_file:
       - .env
     volumes:
@@ -17,13 +17,13 @@ services:
 
   backend:
     image: toursandtravels-backend
-    container_name: travel-backend-prod
+    container_name: travel-backend
     env_file:
       - .env
     environment:
       PYTHONPATH: /app
     expose:
-      - "8000"                # ✅ internal only (nginx will access)
+      - "8000"
     depends_on:
       db:
         condition: service_healthy
@@ -38,10 +38,9 @@ services:
 
   frontend:
     image: toursandtravels-frontend
-    container_name: travel-frontend-prod
+    container_name: travel-frontend
     expose:
       - "80"
-                  
     depends_on:
       backend:
         condition: service_started
@@ -54,4 +53,4 @@ volumes:
 
 networks:
   web:
-    driver: bridge
+    external: true
