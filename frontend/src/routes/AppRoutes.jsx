@@ -67,10 +67,8 @@ export default function AppRoutes() {
   return (
     <Routes>
 
-      <Route
-        path="/login"
-        element={authService.isAuthenticated() ? <Navigate to="/" replace /> : <Login />}
-      />
+      <Route path="/login" element={<Login />} />
+
 
       {/* 🔐 Layout Wrapper */}
       <Route element={<RequireAuth><Layout /></RequireAuth>}>

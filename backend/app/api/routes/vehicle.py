@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database.session import SessionLocal
+from app.models.vehicle import Vehicle
 from app.schemas.vehicle import VehicleCreate, VehicleResponse
 from app.services.vehicle_service import (
     create_vehicle,
@@ -55,10 +56,9 @@ def remove_vehicle(vehicle_id: int, db: Session = Depends(get_db)):
 
 
 
-@router.put("/{vehicle_number}/")
+@router.put("/{vehicle_number}/", response_model=VehicleResponse)
 def update_vehicle(
     vehicle_number: str,
-    _: VehicleCreate,  # payload required but unused for now
     db: Session = Depends(get_db),
 ):
     vehicle = db.query(Vehicle).filter(
@@ -67,8 +67,6 @@ def update_vehicle(
 
     if not vehicle:
         raise HTTPException(status_code=404, detail="Vehicle not found")
-
-    # vehicle_number intentionally NOT editable
 
     db.commit()
     db.refresh(vehicle)

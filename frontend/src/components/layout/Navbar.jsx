@@ -7,7 +7,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     authService.logout();
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   return (

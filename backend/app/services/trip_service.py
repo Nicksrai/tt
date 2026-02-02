@@ -63,6 +63,7 @@ def create_trip(db: Session, trip_data: TripCreate):
     pending_amount = max(total_charged - trip_data.amount_received, 0)
 
     trip = Trip(
+        invoice_number=trip_data.invoice_number,
         trip_date=trip_data.trip_date,
         departure_datetime=trip_data.departure_datetime,
         return_datetime=trip_data.return_datetime,
