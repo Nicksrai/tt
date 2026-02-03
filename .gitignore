@@ -1,0 +1,17 @@
+# Environment files
+.env
+.env.*
+*.env
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.crt
+
+# Docker
+docker-compose.override.yml
+
+# Python
+__pycache__/
+*.pyc
