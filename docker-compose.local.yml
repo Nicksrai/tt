@@ -27,7 +27,7 @@ services:
     environment:
       PYTHONPATH: /app
     expose:
-      - "8000"                 # ✅ internal only (nginx will call this)
+      - "8000"                
     depends_on:
       db:
         condition: service_healthy

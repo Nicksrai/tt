@@ -15,3 +15,5 @@ docker-compose.override.yml
 # Python
 __pycache__/
 *.pyc
+backend/.env
+backend/.env.*

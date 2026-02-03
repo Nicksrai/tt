@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U travel_user -d travel_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -16,7 +16,10 @@ services:
     restart: unless-stopped
 
   backend:
-    image: toursandtravels-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    
     container_name: travel-backend
     env_file:
       - .env
@@ -37,7 +40,10 @@ services:
       --bind 0.0.0.0:8000
 
   frontend:
-    image: toursandtravels-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    
     container_name: travel-frontend
     expose:
       - "80"
