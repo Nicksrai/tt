@@ -7,6 +7,7 @@ from app.models.trip import Trip
 from app.models.fuel import Fuel
 from app.models.vehicle import Vehicle
 from app.models.spare_part import SparePart
+from app.services.auth_service import get_current_user
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -20,7 +21,10 @@ def get_db():
 
 
 @router.get("/")
-def dashboard_summary(db: Session = Depends(get_db)):
+def dashboard_summary(
+    db: Session = Depends(get_db),
+    _current_user=Depends(get_current_user),
+):
     # -------- TRIPS --------
     total_trips = db.query(func.count(Trip.id)).scalar() or 0
 

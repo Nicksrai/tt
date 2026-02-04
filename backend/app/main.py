@@ -20,6 +20,7 @@ from app.api.routes.driver_expense import router as driver_expense_router
 from app.api.routes.payment import router as payment_router
 from app.api.routes.driver_salary_routes import router as driver_salary_router
 from app.api.routes.auth import router as auth_router
+from app.services.auth_service import get_current_user
 
 # Ensure models are imported for table creation
 from app.models import vendor_payment  # noqa: F401
@@ -91,21 +92,23 @@ create_default_users()
 # ===============================
 # Register Routers (NO /api HERE)
 # ===============================
-app.include_router(vehicle_router, prefix="/vehicles", tags=["Vehicles"])
-app.include_router(vehicle_notes_router)
+auth_dependency = [Depends(get_current_user)]
 
-app.include_router(trip_router)
-app.include_router(fuel_router)
-app.include_router(maintenance_router)
-app.include_router(customer_router)
-app.include_router(driver_router)
-app.include_router(spare_part_router)
-app.include_router(payment_router)
-app.include_router(dashboard_router)
-app.include_router(vendor_router)
-app.include_router(vendor_payment_router)
-app.include_router(driver_expense_router, prefix="/driver-expenses", tags=["Driver Expenses"])
-app.include_router(driver_salary_router)
+app.include_router(vehicle_router, prefix="/vehicles", tags=["Vehicles"], dependencies=auth_dependency)
+app.include_router(vehicle_notes_router, dependencies=auth_dependency)
+
+app.include_router(trip_router, dependencies=auth_dependency)
+app.include_router(fuel_router, dependencies=auth_dependency)
+app.include_router(maintenance_router, dependencies=auth_dependency)
+app.include_router(customer_router, dependencies=auth_dependency)
+app.include_router(driver_router, dependencies=auth_dependency)
+app.include_router(spare_part_router, dependencies=auth_dependency)
+app.include_router(payment_router, dependencies=auth_dependency)
+app.include_router(dashboard_router, dependencies=auth_dependency)
+app.include_router(vendor_router, dependencies=auth_dependency)
+app.include_router(vendor_payment_router, dependencies=auth_dependency)
+app.include_router(driver_expense_router, prefix="/driver-expenses", tags=["Driver Expenses"], dependencies=auth_dependency)
+app.include_router(driver_salary_router, dependencies=auth_dependency)
 app.include_router(auth_router)
 
 # ===============================
