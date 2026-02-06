@@ -1,8 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { authService } from "../../services/auth";
+import NathkrupaLogo from "../../assets/nathkrupa-logo.svg";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   const [vendorsOpen, setVendorsOpen] = useState(false);
   const [maintenanceOpen, setMaintenanceOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // 👈 mobile sidebar
@@ -23,7 +25,7 @@ export default function Sidebar() {
         >
           ☰
         </button>
-        <h1 className="text-lg font-bold">Tour & Travel</h1>
+        <img src={NathkrupaLogo} alt="Nathkrupa" className="h-7" />
       </div>
 
       {/* Overlay */}
@@ -45,14 +47,16 @@ export default function Sidebar() {
           md:translate-x-0
         `}
       >
-        <h1 className="p-4 text-xl font-bold border-b border-gray-700">
-          Tour & Travel
-        </h1>
+        <div className="p-4 border-b border-gray-700">
+          <img src={NathkrupaLogo} alt="Nathkrupa" className="h-8" />
+        </div>
 
         <nav className="flex flex-col gap-1 p-2 overflow-y-auto">
           <NavLink to="/" onClick={() => setIsOpen(false)} className={linkClass}>
             Dashboard
           </NavLink>
+
+          
 
           <NavLink to="/vehicles" onClick={() => setIsOpen(false)} className={linkClass}>
             Vehicles

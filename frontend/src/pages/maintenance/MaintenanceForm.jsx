@@ -40,7 +40,7 @@ export default function MaintenanceForm() {
   /* -------- fetch vehicles -------- */
   const fetchVehicles = async () => {
     try {
-      const res = await api.get("/vehicles/");
+      const res = await api.get("/vehicles");
       setVehicles(res.data);
 
       if (res.data.length > 0 && !formData.vehicle_number) {
@@ -59,7 +59,7 @@ export default function MaintenanceForm() {
   const fetchMaintenance = async () => {
     setLoading(true);
     try {
-      const res = await api.get(`/maintenance/${id}/`);
+      const res = await api.get(`/maintenance/${id}`);
       const data = res.data;
 
       setFormData({
@@ -90,9 +90,9 @@ export default function MaintenanceForm() {
 
     try {
       if (id) {
-        await api.put(`/maintenance/${id}/`, formData);
+        await api.put(`/maintenance/${id}`, formData);
       } else {
-        await api.post("/maintenance/", formData);
+        await api.post("/maintenance", formData);
       }
       navigate(`/maintenance/${type}`);
     } catch (err) {

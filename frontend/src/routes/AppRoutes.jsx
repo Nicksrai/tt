@@ -40,6 +40,7 @@ import InvoiceView from "../pages/invoices/InvoiceView";
 import Reports from "../pages/reports/Reports";
 import VendorList from "../pages/vendors/VendorList";
 import VendorDetails from "../pages/vendors/VendorDetails";
+import Notes from "../pages/notes/Notes";
 
 import MaintenanceList from "../pages/maintenance/MaintenanceList";
 import MaintenanceForm from "../pages/maintenance/MaintenanceForm";
@@ -144,6 +145,9 @@ export default function AppRoutes() {
         <Route path="/vendors/fuel" element={<VendorList />} />
         <Route path="/vendors/other" element={<VendorList />} />
         <Route path="/vendors/:id" element={<VendorDetails />} />
+
+        {/* Notes */}
+        <Route path="/notes" element={<Notes />} />
 
       </Route>
 

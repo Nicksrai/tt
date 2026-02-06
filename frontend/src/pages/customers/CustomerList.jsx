@@ -4,17 +4,24 @@ import api from "../../services/api";
 
 export default function CustomerList() {
   const [customers, setCustomers] = useState([]);
+  const [searchName, setSearchName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     // ✅ TRAILING SLASH IS REQUIRED
-    api.get("/customers/")
+    api.get("/customers")
       .then(res => setCustomers(res.data))
       .catch(err => {
         console.error(err);
         setCustomers([]);
       });
   }, []);
+
+  const filteredCustomers = searchName.trim()
+    ? customers.filter(c =>
+        String(c.name || "").toLowerCase().includes(searchName.trim().toLowerCase())
+      )
+    : customers;
 
   return (
     <>
@@ -28,6 +35,16 @@ export default function CustomerList() {
         >
           + Add Customer
         </button>
+      </div>
+
+      {/* Search */}
+      <div className="mb-4">
+        <input
+          className="border p-2 rounded w-full md:w-80"
+          placeholder="Search by Customer Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
       </div>
 
       {/* Table */}
@@ -47,7 +64,7 @@ export default function CustomerList() {
                 </td>
               </tr>
             ) : (
-              customers.map(c => (
+              filteredCustomers.map(c => (
                 <tr key={c.id} className="border-t">
                   <td className="p-3">{c.name}</td>
                   <td className="p-3 space-x-2">

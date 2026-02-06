@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database.session import engine
@@ -14,6 +14,7 @@ from app.api.routes.customer_routes import router as customer_router
 from app.api.routes.driver_routes import router as driver_router
 from app.api.routes.spare_part import router as spare_part_router
 from app.api.routes.dashboard import router as dashboard_router
+from app.api.routes.dashboard_notes import router as dashboard_notes_router
 from app.api.routes.vendor import router as vendor_router
 from app.api.routes.vendor_payment_routes import router as vendor_payment_router
 from app.api.routes.driver_expense import router as driver_expense_router
@@ -26,6 +27,9 @@ from app.services.auth_service import get_current_user
 from app.models import vendor_payment  # noqa: F401
 from app.models import driver_salary  # noqa: F401
 from app.models import user  # noqa: F401
+from app.models import trip_pricing_item  # noqa: F401
+from app.models import trip_driver_change  # noqa: F401
+from app.models import dashboard_note  # noqa: F401
 
 app = FastAPI(
     title="Tour & Travel Management API",
@@ -92,24 +96,28 @@ create_default_users()
 # ===============================
 # Register Routers (NO /api HERE)
 # ===============================
+# ===============================
+# Register Routers (/api PREFIX)
+# ===============================
 auth_dependency = [Depends(get_current_user)]
 
-app.include_router(vehicle_router, prefix="/vehicles", tags=["Vehicles"], dependencies=auth_dependency)
-app.include_router(vehicle_notes_router, dependencies=auth_dependency)
+app.include_router(auth_router, prefix="/api")
 
-app.include_router(trip_router, dependencies=auth_dependency)
-app.include_router(fuel_router, dependencies=auth_dependency)
-app.include_router(maintenance_router, dependencies=auth_dependency)
-app.include_router(customer_router, dependencies=auth_dependency)
-app.include_router(driver_router, dependencies=auth_dependency)
-app.include_router(spare_part_router, dependencies=auth_dependency)
-app.include_router(payment_router, dependencies=auth_dependency)
-app.include_router(dashboard_router, dependencies=auth_dependency)
-app.include_router(vendor_router, dependencies=auth_dependency)
-app.include_router(vendor_payment_router, dependencies=auth_dependency)
-app.include_router(driver_expense_router, prefix="/driver-expenses", tags=["Driver Expenses"], dependencies=auth_dependency)
-app.include_router(driver_salary_router, dependencies=auth_dependency)
-app.include_router(auth_router)
+app.include_router(vehicle_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(vehicle_notes_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(trip_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(fuel_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(maintenance_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(customer_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(driver_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(spare_part_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(payment_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(dashboard_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(dashboard_notes_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(vendor_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(vendor_payment_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(driver_expense_router, prefix="/api", dependencies=auth_dependency)
+app.include_router(driver_salary_router, prefix="/api", dependencies=auth_dependency)
 
 # ===============================
 # Health Check

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
+import { formatDateDDMMYYYY } from "../../utils/date";
 
 export default function MaintenanceList() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function MaintenanceList() {
 
   const fetchVehicles = async () => {
     try {
-      const res = await api.get("/vehicles/");
+      const res = await api.get("/vehicles");
       setVehicles(res.data);
 
       if (res.data.length > 0) {
@@ -46,7 +47,7 @@ export default function MaintenanceList() {
     setLoading(true);
     try {
       const res = await api.get(
-        `/maintenance/vehicle/${selectedVehicle}/`,
+        `/maintenance/vehicle/${selectedVehicle}`,
         { params: { maintenance_type: type } }
       );
       setMaintenances(res.data);
@@ -61,7 +62,7 @@ export default function MaintenanceList() {
     if (!window.confirm("Are you sure you want to delete this record?")) return;
 
     try {
-      await api.delete(`/maintenance/${id}/`);
+      await api.delete(`/maintenance/${id}`);
       setMaintenances((prev) => prev.filter((m) => m.id !== id));
     } catch (err) {
       console.error("Error deleting maintenance:", err);
@@ -164,10 +165,10 @@ export default function MaintenanceList() {
                       {m.description || "-"}
                     </td>
                     <td className="px-6 py-3">
-                      {new Date(m.start_date).toLocaleDateString()}
+                      {formatDateDDMMYYYY(m.start_date)}
                     </td>
                     <td className="px-6 py-3 text-sm text-gray-600 hidden md:table-cell">
-                      {new Date(m.created_at).toLocaleDateString()}
+                      {formatDateDDMMYYYY(m.created_at)}
                     </td>
                     <td className="px-6 py-3 flex flex-wrap gap-2">
                       <button
