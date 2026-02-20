@@ -146,7 +146,14 @@ export default function InvoiceList() {
 
                 return (
                   <tr key={trip.id} className="border-t hover:bg-gray-50">
-                    <td className="p-2 font-semibold">INV-{String(trip.id).padStart(4, '0')}</td>
+                    <td className="p-2 font-semibold">
+                      <button
+                        onClick={() => navigate(`/trips/${trip.id}`)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {trip.invoice_number || `INV-${String(trip.id).padStart(4, "0")}`}
+                      </button>
+                    </td>
                     <td className="p-2">{customer?.name || "N/A"}</td>
                     <td className="p-2">{formatDateDDMMYYYY(trip.trip_date)}</td>
                     <td className="p-2">{trip.vehicle_number}</td>

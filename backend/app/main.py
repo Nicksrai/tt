@@ -1,5 +1,6 @@
 from fastapi import FastAPI,Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect, text
 
 from app.database.session import engine
 from app.database.base import Base
@@ -57,37 +58,50 @@ app.add_middleware(
 # ===============================
 Base.metadata.create_all(bind=engine)
 
+
+def ensure_schema_updates():
+    inspector = inspect(engine)
+    existing_tables = set(inspector.get_table_names())
+    if "maintenance" not in existing_tables:
+        return
+
+    maintenance_columns = {col["name"] for col in inspector.get_columns("maintenance")}
+    if "end_date" not in maintenance_columns:
+        with engine.begin() as conn:
+            conn.execute(text("ALTER TABLE maintenance ADD COLUMN end_date DATETIME"))
+
+
+ensure_schema_updates()
+
 # ===============================
 # Create Default Users
 # ===============================
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from app.models.user import User
 
 def create_default_users():
     db = Session(bind=engine)
     try:
-        if not db.query(User).filter(User.username == "Nathkrupa_1").first():
-            db.add(User(
-                username="Nathkrupa_1",
-                password_hash=User.hash_password("Nathkrupa_1"),
-                role="admin"
-            ))
+        default_users = [
+            ("Nathkrupa_1", "Nathkrupa_1", "admin"),
+            ("Nathkrupa_2", "Nathkrupa_2", "admin"),
+            ("Nathkrupa_3", "Nathkrupa_3", "limited"),
+        ]
 
-        if not db.query(User).filter(User.username == "Nathkrupa_2").first():
+        for username, password, role in default_users:
+            exists = db.query(User).filter(User.username == username).first()
+            if exists:
+                continue
             db.add(User(
-                username="Nathkrupa_2",
-                password_hash=User.hash_password("Nathkrupa_2"),
-                role="admin"
+                username=username,
+                password_hash=User.hash_password(password),
+                role=role
             ))
-
-        if not db.query(User).filter(User.username == "Nathkrupa_3").first():
-            db.add(User(
-                username="Nathkrupa_3",
-                password_hash=User.hash_password("Nathkrupa_3"),
-                role="limited"
-            ))
-
-        db.commit()
+            try:
+                db.commit()
+            except IntegrityError:
+                db.rollback()
     finally:
         db.close()
 

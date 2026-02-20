@@ -10,6 +10,7 @@ from app.schemas.maintenance import (
 )
 from app.services.maintenance_service import (
     add_maintenance,
+    get_all_maintenance,
     get_maintenance_by_vehicle,
     get_maintenance_by_id,
     update_maintenance,
@@ -35,6 +36,14 @@ def get_db():
 @router.post("", response_model=MaintenanceResponse)
 def create_maintenance(data: MaintenanceCreate, db: Session = Depends(get_db)):
     return add_maintenance(db, data)
+
+
+@router.get("", response_model=list[MaintenanceResponse])
+def list_maintenance(
+    maintenance_type: MaintenanceType = Query(None),
+    db: Session = Depends(get_db)
+):
+    return get_all_maintenance(db, maintenance_type)
 
 
 # ---------------- GET MAINTENANCE BY VEHICLE ----------------

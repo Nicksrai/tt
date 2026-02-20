@@ -131,6 +131,7 @@ export default function AppRoutes() {
         <Route path="/invoices/:id" element={<InvoiceView />} />
 
         {/* Maintenance */}
+        <Route path="/maintenance" element={<Navigate to="/maintenance/all" replace />} />
         <Route path="/maintenance/:type" element={<MaintenanceList />} />
         <Route path="/maintenance/:type/add" element={<MaintenanceForm />} />
         <Route path="/maintenance/:type/edit/:id" element={<MaintenanceForm />} />

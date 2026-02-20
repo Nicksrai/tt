@@ -119,6 +119,12 @@ export default function DriverDetails() {
             <h1 className="text-3xl font-bold text-gray-800">{driver.name}</h1>
             <p className="text-gray-600">Driver Details & Expenses</p>
           </div>
+          <button
+            onClick={() => window.print()}
+            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-black"
+          >
+            Print
+          </button>
         </div>
 
         {/* Summary Cards */}

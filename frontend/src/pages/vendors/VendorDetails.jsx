@@ -242,20 +242,28 @@ export default function VendorDetails() {
           <h1 className="text-2xl font-bold">{vendor.name}</h1>
           <p className="text-gray-600 capitalize">{vendor.category || "N/A"}</p>
         </div>
-        <button
-          onClick={() => {
-            if (vendor.category === "fuel") {
-              handleOpenModal("fuel");
-            } else if (vendor.category === "spare") {
-              handleOpenModal("spare");
-            } else if (vendor.category === "both") {
-              setShowAddModal(true);
-            }
-          }}
-          className="bg-green-600 text-white px-4 py-2 rounded"
-        >
-          + Add Entry
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => window.print()}
+            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-black"
+          >
+            Print
+          </button>
+          <button
+            onClick={() => {
+              if (vendor.category === "fuel") {
+                handleOpenModal("fuel");
+              } else if (vendor.category === "spare") {
+                handleOpenModal("spare");
+              } else if (vendor.category === "both") {
+                setShowAddModal(true);
+              }
+            }}
+            className="bg-green-600 text-white px-4 py-2 rounded"
+          >
+            + Add Entry
+          </button>
+        </div>
       </div>
 
       {/* ADD ENTRY MODAL */}
